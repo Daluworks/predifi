@@ -10,9 +10,19 @@
   },
   "build": {
     "method": "Offline byte fixture, not a Rust/Soroban build",
-    "lockfile_sha256": null,
-    "toolchain": null,
-    "note": "No build/reproducibility or deployment claim. Real releases require recorded toolchain, lockfile and commands."
+    "lockfile_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "toolchain": {
+      "rust": "rustc 1.85.0 (4d91de4e4 2025-02-17)",
+      "target": "wasm32-unknown-unknown",
+      "soroban_sdk": "23",
+      "wasm_opt": "version_120"
+    },
+    "workflow": {
+      "id": ".github/workflows/contract-ci.yml",
+      "run_id": "100000001",
+      "ref": "refs/tags/contracts-v0.1.0-rc.1"
+    },
+    "note": "Machine-readable build provenance binding artifacts to commit, toolchain, and workflow identity."
   },
   "artifacts": [
     {

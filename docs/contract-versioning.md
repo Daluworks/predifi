@@ -166,19 +166,28 @@ The release author and a contract reviewer complete this checklist before promot
 
 [contract-release.example.json](releases/contract-release.example.json) is an
 **offline synthetic test release**, not a deployed PrediFi release. Its source
-tag/commit, client identities, addresses and transaction records are fixtures.
-The tiny WASM byte strings only exercise digest mapping; they have no Soroban
-contract implementation and must not be uploaded. No actual release tag is created.
+tag/commit, client identities, addresses, and transaction records are fixtures.
+It includes machine-readable SBOM/build provenance binding artifacts to commit,
+toolchain, and workflow identity. The tiny WASM byte strings only exercise digest
+mapping; they have no Soroban contract implementation and must not be uploaded.
+No actual release tag is created.
 
-Run from the repository root with Python 3:
+Run from the repository root with Node.js (or Python 3):
+
+```sh
+node scripts/validate-release.mjs
+```
+
+or with Python 3:
 
 ```sh
 python docs/releases/validate_example.py
 ```
 
 The walkthrough checks the tag-to-version link, independently hashes both fixture
-artifacts, and resolves every deployment to exactly one artifact, schema and source
-revision. It then demonstrates rejection of an altered digest, unknown artifact,
-wrong schema, wrong source revision and unsupported client version. Passing this
-offline check establishes example consistency only; checklist steps 2, 3 and 5
-still require real build, migration, client and network evidence for a real release.
+artifacts, validates machine-readable toolchain and workflow provenance, and resolves
+every deployment to exactly one artifact, schema, and source revision. It then demonstrates
+rejection of an altered digest, unknown artifact, wrong schema, wrong source revision,
+unsupported client version, and missing build toolchain. Passing this offline check establishes
+example consistency only; checklist steps 2, 3, and 5 still require real build, migration,
+client, and network evidence for a real release.
