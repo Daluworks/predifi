@@ -25,6 +25,11 @@ def validate(example):
     source = example["source"]
     require(source["tag"] == "contracts-v" + version, "tag/version mismatch")
     require(re.fullmatch(r"[0-9a-f]{40}", source["commit"]), "invalid source SHA")
+    if "build" in example and example["build"].get("workflow"):
+        build_wf = example["build"]["workflow"]
+        require(build_wf.get("id") is not None, "missing build workflow id")
+        require(build_wf.get("run_id") is not None, "missing build workflow run_id")
+        require(example["build"].get("toolchain") is not None, "missing build toolchain")
     artifacts = {item["id"]: item for item in example["artifacts"]}
     require(len(artifacts) == len(example["artifacts"]), "duplicate artifact ID")
     require(set(artifacts) == {"access-control", "predifi-contract"}, "missing artifact")
@@ -82,6 +87,17 @@ def main():
             print(f"PASS: rejected {expected}")
         else:
             raise ValueError(f"failed to reject {expected}")
+    
+    # Negative test case for missing build toolchain
+    changed_toolchain = copy.deepcopy(example)
+    changed_toolchain["build"]["toolchain"] = None
+    try:
+        validate(changed_toolchain)
+    except ValueError as error:
+        require(str(error) == "missing build toolchain", f"unexpected rejection: {error}")
+        print("PASS: rejected missing build toolchain")
+    else:
+        raise ValueError("failed to reject missing build toolchain")
     print("No WASM executed and no network deployment performed.")
 
 
